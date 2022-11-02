@@ -11,12 +11,13 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   useFactory: async (): Promise<TypeOrmModuleOptions> => {
     return {
       type: 'postgres',
+      url: process.env.DATABASE_URL,
       host: process.env.DB_HOST,
-      database: process.env.DB_NAME,
-      username: process.env.DB_USERNAME,
       port: parseInt(process.env.DB_PORT, 10),
+      username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      url: process.env.DB_URL,
+      database: process.env.DB_DATABASE,
+      ssl: { rejectUnauthorized: false },
       entities: Entities,
       synchronize: true,
     };
