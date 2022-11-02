@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
+import { CategoryEntity } from '../category/category.entity';
 import { CreateProjectDto, UpdateProjectDto } from './dto';
 
 import { ProjectEntity } from './project.entity';
@@ -21,10 +22,17 @@ export class ProjectRepository extends Repository<ProjectEntity> {
   }
 
   async getProjectData(projectId: number): Promise<ProjectEntity> {
-    // const query = this.createQueryBuilder('category');
-    // query.innerJoinAndSelect('category.project', 'project');
+    const query = this.createQueryBuilder('project');
 
-    return await this.findOneBy({ id: projectId });
+    query.leftJoinAndSelect('project.categories', 'category');
+
+    query.where('project.id = :projectId', { projectId });
+
+    query.select(['project.id', 'project.name', 'project.text']);
+
+    query.addSelect(['category.id', 'category.text']);
+
+    return query.getOne();
   }
 
   public async createProject(
@@ -62,6 +70,13 @@ export class ProjectRepository extends Repository<ProjectEntity> {
   }
 
   async deleteProject(projectId: number): Promise<void> {
-    await this.remove(await this.findOneBy({ id: projectId }));
+    // ВИДАЛЕННЯ КАТЕГОРІЙ ПРОЕКТУ
+
+    await CategoryEntity.createQueryBuilder()
+      .delete()
+      .where('projectId = :projectId', { projectId })
+      .execute();
+
+    await this.delete(projectId);
   }
 }
