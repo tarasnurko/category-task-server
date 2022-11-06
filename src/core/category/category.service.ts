@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { CategoryEntity } from './category.entity';
 import { CategoryRepository } from './category.repository';
 import {
   CreateCategoryDto,
   GetCategoryDataDto,
   GetCategoryListDto,
+  UpdateCategoryDto,
 } from './dto';
 
 @Injectable()
@@ -27,6 +27,18 @@ export class CategoryService {
   ): Promise<GetCategoryDataDto> {
     return await this.categoryRepository.createCategory(
       createCategoryDto,
+      projectId,
+    );
+  }
+
+  async updateCategory(
+    updateCategoryDto: UpdateCategoryDto,
+    categoryId: number,
+    projectId: number,
+  ): Promise<UpdateCategoryDto> {
+    return await this.categoryRepository.updateCategory(
+      updateCategoryDto,
+      categoryId,
       projectId,
     );
   }

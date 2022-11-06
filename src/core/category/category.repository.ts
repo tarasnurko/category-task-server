@@ -6,7 +6,7 @@ import {
 import { DataSource, Repository } from 'typeorm';
 
 import { CategoryEntity } from './category.entity';
-import { CreateCategoryDto } from './dto';
+import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 import { CATEGORY_ERROR } from './enum';
 
 @Injectable()
@@ -48,6 +48,26 @@ export class CategoryRepository extends Repository<CategoryEntity> {
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+
+  async updateCategory(
+    updateCategoryDto: UpdateCategoryDto,
+    categoryId: number,
+    projectId: number,
+  ): Promise<CategoryEntity> {
+    const { text } = updateCategoryDto;
+
+    if (await this.findOneBy({ text, projectId })) {
+      throw new ConflictException(CATEGORY_ERROR.DUPLICATED_CATEGORY_ERROR);
+    }
+
+    const category = await this.findOneBy({ id: categoryId });
+
+    if (category.text !== text) category.text = text;
+
+    await category.save();
+
+    return category;
   }
 
   async deleteCategory(categoryId: number): Promise<void> {

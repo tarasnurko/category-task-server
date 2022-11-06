@@ -14,7 +14,6 @@ exports.typeOrmAsyncConfig = {
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE,
-            ssl: { rejectUnauthorized: false },
             entities: exports.Entities,
             synchronize: true,
         };

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
   ValidationPipe,
@@ -16,6 +17,7 @@ import {
   CreateCategoryDto,
   GetCategoryDataDto,
   GetCategoryListDto,
+  UpdateCategoryDto,
 } from './dto';
 
 import { CategoryGuard, ProjectCategoryGuard } from './guard';
@@ -36,6 +38,20 @@ export class CategoryController {
     @Param('projectId') projectId,
   ): Promise<GetCategoryDataDto> {
     return this.categoryService.createCategory(createCategoryDto, projectId);
+  }
+
+  @Patch(':categoryId')
+  @UseGuards(CategoryGuard, ProjectCategoryGuard)
+  updateProject(
+    @Body(ValidationPipe) updateCategoryDto: UpdateCategoryDto,
+    @Param('categoryId') categoryId,
+    @Param('projectId') projectId,
+  ) {
+    return this.categoryService.updateCategory(
+      updateCategoryDto,
+      categoryId,
+      projectId,
+    );
   }
 
   @Delete(':categoryId')

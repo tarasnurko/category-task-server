@@ -28,6 +28,9 @@ let CategoryController = class CategoryController {
     createCategory(createCategoryDto, projectId) {
         return this.categoryService.createCategory(createCategoryDto, projectId);
     }
+    updateProject(updateCategoryDto, categoryId, projectId) {
+        return this.categoryService.updateCategory(updateCategoryDto, categoryId, projectId);
+    }
     deleteProject(categoryId) {
         return this.categoryService.deleteCategory(categoryId);
     }
@@ -47,6 +50,16 @@ __decorate([
     __metadata("design:paramtypes", [dto_1.CreateCategoryDto, Object]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "createCategory", null);
+__decorate([
+    (0, common_1.Patch)(':categoryId'),
+    (0, common_1.UseGuards)(guard_2.CategoryGuard, guard_2.ProjectCategoryGuard),
+    __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
+    __param(1, (0, common_1.Param)('categoryId')),
+    __param(2, (0, common_1.Param)('projectId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [dto_1.UpdateCategoryDto, Object, Object]),
+    __metadata("design:returntype", void 0)
+], CategoryController.prototype, "updateProject", null);
 __decorate([
     (0, common_1.Delete)(':categoryId'),
     (0, common_1.UseGuards)(guard_2.CategoryGuard, guard_2.ProjectCategoryGuard),

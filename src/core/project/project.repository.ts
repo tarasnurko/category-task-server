@@ -70,8 +70,6 @@ export class ProjectRepository extends Repository<ProjectEntity> {
   }
 
   async deleteProject(projectId: number): Promise<void> {
-    // ВИДАЛЕННЯ КАТЕГОРІЙ ПРОЕКТУ
-
     await CategoryEntity.createQueryBuilder()
       .delete()
       .where('projectId = :projectId', { projectId })

@@ -42,6 +42,17 @@ let CategoryRepository = class CategoryRepository extends typeorm_1.Repository {
             throw new common_1.InternalServerErrorException();
         }
     }
+    async updateCategory(updateCategoryDto, categoryId, projectId) {
+        const { text } = updateCategoryDto;
+        if (await this.findOneBy({ text, projectId })) {
+            throw new common_1.ConflictException(enum_1.CATEGORY_ERROR.DUPLICATED_CATEGORY_ERROR);
+        }
+        const category = await this.findOneBy({ id: categoryId });
+        if (category.text !== text)
+            category.text = text;
+        await category.save();
+        return category;
+    }
     async deleteCategory(categoryId) {
         await this.remove(await this.findOneBy({ id: categoryId }));
     }

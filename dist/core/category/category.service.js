@@ -27,6 +27,9 @@ let CategoryService = class CategoryService {
     async createCategory(createCategoryDto, projectId) {
         return await this.categoryRepository.createCategory(createCategoryDto, projectId);
     }
+    async updateCategory(updateCategoryDto, categoryId, projectId) {
+        return await this.categoryRepository.updateCategory(updateCategoryDto, categoryId, projectId);
+    }
     async deleteCategory(categoryId) {
         return await this.categoryRepository.deleteCategory(categoryId);
     }
